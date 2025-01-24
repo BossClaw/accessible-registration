@@ -14,22 +14,29 @@
     <div class="bodyContent">
       <header style="text-align: center">
         <h1>**** CPAN134 WEB - EXERCISE 2 ****</h1>
-        <p aria-label="System RAM info">134K RAM SYSTEM 2025 BASIC BYTES FREE</p>
+        <p aria-label="System RAM info">
+          134K RAM SYSTEM 2025 BASIC BYTES FREE
+        </p>
       </header>
 
       <main>
-        <form id="exer02form" action="#" method="POST" aria-labelledby="form-title">
+        <form
+          id="exer02form"
+          action="#"
+          method="POST"
+          aria-labelledby="form-title"
+        >
           <h2 id="form-title">Registration Form</h2>
 
           <div>
             <label for="name">Full Name:</label>
-            <input 
-              type="text" 
-              id="name" 
-              name="name" 
-              required 
-              aria-required="true" 
-              aria-describedby="name-desc" 
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              aria-required="true"
+              aria-describedby="name-desc"
             />
             <p id="name-desc" class="sr-only">Enter your full legal name</p>
           </div>
@@ -37,13 +44,13 @@
 
           <div>
             <label for="email">Email Address:</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              required 
-              aria-required="true" 
-              aria-describedby="email-desc" 
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              aria-required="true"
+              aria-describedby="email-desc"
             />
             <p id="email-desc" class="sr-only">Provide a valid email address</p>
           </div>
@@ -51,13 +58,13 @@
 
           <div>
             <label for="password">Password:</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              required 
-              aria-required="true" 
-              aria-describedby="password-desc" 
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              aria-required="true"
+              aria-describedby="password-desc"
             />
             <p id="password-desc" class="sr-only">Choose a secure password</p>
           </div>
@@ -66,7 +73,13 @@
           <fieldset>
             <legend>Gender:</legend>
             <label>
-              <input type="radio" name="gender" value="male" required aria-required="true" />Male
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                required
+                aria-required="true"
+              />Male
             </label>
             <label>
               <input type="radio" name="gender" value="female" />Female
@@ -79,13 +92,13 @@
 
           <div>
             <label for="dob">Date of Birth:</label>
-            <input 
-              type="date" 
-              id="dob" 
-              name="dob" 
-              required 
-              aria-required="true" 
-              aria-describedby="dob-desc" 
+            <input
+              type="date"
+              id="dob"
+              name="dob"
+              required
+              aria-required="true"
+              aria-describedby="dob-desc"
             />
             <p id="dob-desc" class="sr-only">Select your birth date</p>
           </div>
@@ -93,21 +106,33 @@
 
           <div>
             <label class="labelWide">
-              <input type="checkbox" name="terms" required aria-required="true" />
+              <input
+                type="checkbox"
+                name="terms"
+                required
+                aria-required="true"
+              />
               I agree to the Terms and Conditions
             </label>
           </div>
           <br />
 
-          <button type="submit" aria-label="Register for the site">Register</button>
+          <button type="submit" aria-label="Register for the site">
+            Register
+          </button>
         </form>
       </main>
     </div>
 
     <!-- MODAL -->
-    <div id="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div
+      id="modal"
+      role="dialog"
+      aria-labelledby="modal_mesg"
+      aria-hidden="true"
+    >
       <div id="modalContent">
-        <p id="modal-title">Form submitted successfully!</p>
+        <p id="modal_mesg">Form submitted successfully!</p>
         <button id="closeModal" aria-label="Close this modal">Close</button>
       </div>
     </div>
@@ -118,7 +143,54 @@
       const closeModalButton = document.getElementById("closeModal");
 
       form.addEventListener("submit", function (event) {
-        event.preventDefault();        
+        event.preventDefault();
+
+        // SIMPLE VALIDATION
+        let mesg_str = "Form data is valid!";
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const gender = document.querySelector("input[name='gender']:checked");
+        const dob = document.getElementById("dob").value.trim();
+        const terms = document.querySelector("input[name='terms']").checked;
+
+        let errors = [];
+
+        if (name.length <= 2) {
+          errors.push("Full Name must be longer than 2 characters.");
+        }
+
+        if (!email) {
+          errors.push("Email Address is required.");
+        }
+
+        if (!password || password.length < 5) {
+          errors.push("Password longer than 5 characters is required.");
+        }
+
+        if (!gender) {
+          errors.push("Please select a Gender.");
+        }
+
+        if (!dob) {
+          errors.push("Date of Birth is required.");
+        }
+
+        if (!terms) {
+          errors.push("You must agree to the Terms and Conditions.");
+        }
+
+        if (errors.length > 0) {
+          // alert(errors.join("\n"));
+
+          mesg_str = errors.join("\n");
+        }
+
+        // SET THE MESG ON THE MODAL
+        document.querySelector("#modal_mesg").innerHTML = mesg_str;
+
+        // DISPLAY THE MODAL
         modal.style.display = "flex";
         modal.setAttribute("aria-hidden", "false");
       });
